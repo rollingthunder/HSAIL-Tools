@@ -43,9 +43,11 @@ endif()
 
 if(UNIX)
   #FIXME: Should set -fno-rtti etc. from LLVM config flags.
+  execute_process(COMMAND ${LLVM_CONFIG_EXE} --cxxflags
+	  OUTPUT_VARIABLE LLVM_CXX_FLAGS)
+  string(STRIP ${LLVM_CXX_FLAGS} LLVM_CXX_FLAGS)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_CFLAGS}")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${EXTRA_CFLAGS}")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11 -pthread -D __STDC_LIMIT_MACROS -D __STDC_CONSTANT_MACROS  -D __STDC_FORMAT_MACROS -fno-rtti -fvisibility-inlines-hidden")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${EXTRA_CFLAGS} ${LLVM_CXX_FLAGS} -pthread")
 endif()
 
 add_subdirectory(libHSAIL)
